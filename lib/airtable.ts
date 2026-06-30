@@ -47,6 +47,44 @@ export async function createEvidence(data: { date: string; evidence: string }) {
   return res.json()
 }
 
+export async function updateTrigger(id: string, data: Record<string, string>) {
+  const res = await fetch(`${BASE}/${TRIGGER_TABLE}/${id}`, {
+    method: 'PATCH',
+    headers: headers(),
+    body: JSON.stringify({ fields: data }),
+  })
+  if (!res.ok) throw new Error(await res.text())
+  return res.json()
+}
+
+export async function deleteTrigger(id: string) {
+  const res = await fetch(`${BASE}/${TRIGGER_TABLE}/${id}`, {
+    method: 'DELETE',
+    headers: headers(),
+  })
+  if (!res.ok) throw new Error(await res.text())
+  return res.json()
+}
+
+export async function updateEvidence(id: string, data: Record<string, string>) {
+  const res = await fetch(`${BASE}/${EVIDENCE_TABLE}/${id}`, {
+    method: 'PATCH',
+    headers: headers(),
+    body: JSON.stringify({ fields: data }),
+  })
+  if (!res.ok) throw new Error(await res.text())
+  return res.json()
+}
+
+export async function deleteEvidence(id: string) {
+  const res = await fetch(`${BASE}/${EVIDENCE_TABLE}/${id}`, {
+    method: 'DELETE',
+    headers: headers(),
+  })
+  if (!res.ok) throw new Error(await res.text())
+  return res.json()
+}
+
 export async function getTriggers() {
   const params = new URLSearchParams({
     'sort[0][field]': 'Date',
