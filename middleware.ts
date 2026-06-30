@@ -8,9 +8,9 @@ export function middleware(request: NextRequest) {
   if (PUBLIC.some((p) => pathname.startsWith(p))) return NextResponse.next()
 
   const session = request.cookies.get('wwp_session')?.value
-  const password = process.env.SITE_PASSWORD
+  const secret = process.env.SESSION_SECRET
 
-  if (!password || session !== password) {
+  if (!secret || session !== secret) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
   return NextResponse.next()

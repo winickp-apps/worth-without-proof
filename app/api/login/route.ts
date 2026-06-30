@@ -8,8 +8,11 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Wrong password' }, { status: 401 })
   }
 
+  const secret = process.env.SESSION_SECRET
+  if (!secret) return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 })
+
   const res = NextResponse.json({ ok: true })
-  res.cookies.set('wwp_session', correct, {
+  res.cookies.set('wwp_session', secret, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
