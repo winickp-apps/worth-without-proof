@@ -21,7 +21,8 @@ export default function LoginPage() {
     if (res.ok) {
       router.push('/')
     } else {
-      setError('Incorrect password.')
+      const data = await res.json().catch(() => ({}))
+      setError(res.status === 500 ? `Server error: ${data.error ?? 'check Vercel env vars'}` : 'Incorrect password.')
       setLoading(false)
     }
   }
