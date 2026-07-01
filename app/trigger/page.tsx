@@ -40,15 +40,67 @@ const FIELDS = [
   },
 ]
 
+const SCARF_ITEMS = [
+  {
+    key: 'scarfStatus',
+    label: 'Status',
+    description: 'Your relative importance or ranking compared to others.',
+    reward: 'Feeling valued, respected, or praised.',
+    threat: 'Unsolicited negative feedback or being treated as inferior.',
+  },
+  {
+    key: 'scarfCertainty',
+    label: 'Certainty',
+    description: 'Your ability to predict the future or know what will happen next.',
+    reward: 'Clarity, clear expectations, and predictable routines.',
+    threat: 'Ambiguity, organizational change, or not knowing what to expect.',
+  },
+  {
+    key: 'scarfAutonomy',
+    label: 'Autonomy',
+    description: 'Your sense of control over your choices and environment.',
+    reward: 'Having choices and freedom to make decisions.',
+    threat: 'Micromanagement or a strict command-and-control setup.',
+  },
+  {
+    key: 'scarfRelatedness',
+    label: 'Relatedness',
+    description: 'Your feeling of safety, trust, and connection with others.',
+    reward: 'Being included, having a mentor, or feeling like part of a tribe.',
+    threat: 'Social rejection, isolation, or feeling like an outsider.',
+  },
+  {
+    key: 'scarfFairness',
+    label: 'Fairness',
+    description: 'Your perception that interactions and decisions are equitable and unbiased.',
+    reward: 'Transparency, honesty, and an even playing field.',
+    threat: 'Perceived favoritism, unequal rules, or hidden agendas.',
+  },
+]
+
+const SCARF_INITIAL: Record<string, boolean> = {
+  scarfStatus: false,
+  scarfCertainty: false,
+  scarfAutonomy: false,
+  scarfRelatedness: false,
+  scarfFairness: false,
+}
+
 export default function TriggerPage() {
   const [date, setDate] = useState(today())
   const [fields, setFields] = useState<Record<string, string>>({
     trigger: '', meaning: '', body: '', protection: '', correction: '',
   })
+  const [scarf, setScarf] = useState<Record<string, boolean>>(SCARF_INITIAL)
+  const [scarfInfoOpen, setScarfInfoOpen] = useState(false)
   const [status, setStatus] = useState<'idle' | 'loading' | 'done' | 'error'>('idle')
 
   function set(key: string, value: string) {
     setFields((f) => ({ ...f, [key]: value }))
+  }
+
+  function toggleScarf(key: string) {
+    setScarf((s) => ({ ...s, [key]: !s[key] }))
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -57,7 +109,7 @@ export default function TriggerPage() {
     const res = await fetch('/api/trigger', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ date, ...fields }),
+      body: JSON.stringify({ date, ...fields, ...scarf }),
     })
     setStatus(res.ok ? 'done' : 'error')
   }
@@ -72,6 +124,7 @@ export default function TriggerPage() {
           <button
             onClick={() => {
               setFields({ trigger: '', meaning: '', body: '', protection: '', correction: '' })
+              setScarf(SCARF_INITIAL)
               setDate(today())
               setStatus('idle')
             }}
@@ -118,6 +171,57 @@ export default function TriggerPage() {
               rows={3}
               className="w-full border border-stone-300 rounded-xl px-4 py-3 text-base bg-white focus:outline-none focus:ring-2 focus:ring-stone-400 resize-none"
             />
+
+            {f.key === 'trigger' && (
+              <div className="mt-3 border border-stone-200 rounded-xl overflow-hidden">
+                <div className="px-4 py-3 bg-stone-50 flex items-center justify-between">
+                  <div>
+                    <span className="text-xs font-semibold text-stone-600 uppercase tracking-wide">SCARF</span>
+                    <span className="text-xs text-stone-400 ml-2">Which needs were threatened?</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setScarfInfoOpen((o) => !o)}
+                    className="text-xs text-stone-400 underline underline-offset-2 shrink-0 ml-3"
+                  >
+                    {scarfInfoOpen ? 'Hide info' : 'What is SCARF?'}
+                  </button>
+                </div>
+
+                {scarfInfoOpen && (
+                  <div className="px-4 py-3 bg-stone-50 border-t border-stone-100 space-y-4">
+                    {SCARF_ITEMS.map((item) => (
+                      <div key={item.key}>
+                        <div className="text-xs font-semibold text-stone-700">
+                          {item.label[0]} — {item.label}
+                        </div>
+                        <div className="text-xs text-stone-500 mt-0.5">{item.description}</div>
+                        <div className="text-xs text-stone-500 mt-1">
+                          <span className="text-emerald-600 font-medium">Reward:</span> {item.reward}
+                        </div>
+                        <div className="text-xs text-stone-500">
+                          <span className="text-red-500 font-medium">Threat:</span> {item.threat}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <div className="px-4 py-3 space-y-3 border-t border-stone-100 bg-white">
+                  {SCARF_ITEMS.map((item) => (
+                    <label key={item.key} className="flex items-center gap-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={scarf[item.key]}
+                        onChange={() => toggleScarf(item.key)}
+                        className="w-5 h-5 rounded border-stone-300 accent-stone-900 cursor-pointer"
+                      />
+                      <span className="text-sm text-stone-700">{item.label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         ))}
 

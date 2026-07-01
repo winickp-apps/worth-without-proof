@@ -16,6 +16,11 @@ export async function createTrigger(data: {
   body: string
   protection: string
   correction: string
+  scarfStatus?: boolean
+  scarfCertainty?: boolean
+  scarfAutonomy?: boolean
+  scarfRelatedness?: boolean
+  scarfFairness?: boolean
 }) {
   const res = await fetch(`${BASE}/${TRIGGER_TABLE}`, {
     method: 'POST',
@@ -28,6 +33,11 @@ export async function createTrigger(data: {
         Body: data.body,
         Protection: data.protection,
         Correction: data.correction,
+        'SCARF Status': data.scarfStatus ?? false,
+        'SCARF Certainty': data.scarfCertainty ?? false,
+        'SCARF Autonomy': data.scarfAutonomy ?? false,
+        'SCARF Relatedness': data.scarfRelatedness ?? false,
+        'SCARF Fairness': data.scarfFairness ?? false,
       },
     }),
   })
@@ -47,7 +57,7 @@ export async function createEvidence(data: { date: string; evidence: string }) {
   return res.json()
 }
 
-export async function updateTrigger(id: string, data: Record<string, string>) {
+export async function updateTrigger(id: string, data: Record<string, string | boolean>) {
   const res = await fetch(`${BASE}/${TRIGGER_TABLE}/${id}`, {
     method: 'PATCH',
     headers: headers(),

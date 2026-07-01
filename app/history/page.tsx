@@ -10,6 +10,11 @@ type TriggerFields = {
   Body?: string
   Protection?: string
   Correction?: string
+  'SCARF Status'?: boolean
+  'SCARF Certainty'?: boolean
+  'SCARF Autonomy'?: boolean
+  'SCARF Relatedness'?: boolean
+  'SCARF Fairness'?: boolean
 }
 
 type TriggerRecord = { id: string; createdTime: string; fields: TriggerFields }
@@ -21,6 +26,14 @@ const TRIGGER_FIELD_DEFS = [
   { key: 'Body', label: 'Body' },
   { key: 'Protection', label: 'Protection' },
   { key: 'Correction', label: 'Correction' },
+]
+
+const SCARF_FIELD_DEFS = [
+  { key: 'SCARF Status', label: 'Status' },
+  { key: 'SCARF Certainty', label: 'Certainty' },
+  { key: 'SCARF Autonomy', label: 'Autonomy' },
+  { key: 'SCARF Relatedness', label: 'Relatedness' },
+  { key: 'SCARF Fairness', label: 'Fairness' },
 ]
 
 function formatDate(dateStr?: string) {
@@ -141,7 +154,7 @@ function TriggerCard({
   const [draft, setDraft] = useState<TriggerFields>(record.fields)
   const [saving, setSaving] = useState(false)
 
-  function setField(key: string, val: string) {
+  function setField(key: string, val: string | boolean) {
     setDraft((d) => ({ ...d, [key]: val }))
   }
 
@@ -194,6 +207,27 @@ function TriggerCard({
             </div>
           ))}
 
+          <div>
+            <div className="text-[10px] font-semibold text-stone-400 uppercase tracking-wide mb-1.5">SCARF</div>
+            <div className="flex flex-wrap gap-2">
+              {SCARF_FIELD_DEFS.map(({ key, label }) => {
+                const checked = (f as Record<string, boolean | undefined>)[key]
+                return (
+                  <span
+                    key={key}
+                    className={`text-xs px-2.5 py-1 rounded-full border font-medium ${
+                      checked
+                        ? 'border-stone-400 text-stone-700 bg-stone-100'
+                        : 'border-stone-200 text-stone-300'
+                    }`}
+                  >
+                    {label}
+                  </span>
+                )
+              })}
+            </div>
+          </div>
+
           <div className="flex gap-2 pt-2">
             <button
               onClick={() => { setEditing(true); setDraft(f) }}
@@ -242,6 +276,22 @@ function TriggerCard({
               />
             </div>
           ))}
+          <div>
+            <div className="text-[10px] font-semibold text-stone-400 uppercase tracking-wide mb-2">SCARF</div>
+            <div className="space-y-2">
+              {SCARF_FIELD_DEFS.map(({ key, label }) => (
+                <label key={key} className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={(draft as Record<string, boolean | undefined>)[key] ?? false}
+                    onChange={(e) => setField(key, e.target.checked)}
+                    className="w-4 h-4 rounded border-stone-300 accent-stone-900 cursor-pointer"
+                  />
+                  <span className="text-sm text-stone-700">{label}</span>
+                </label>
+              ))}
+            </div>
+          </div>
           <div className="flex gap-2 pt-1">
             <button
               onClick={() => { setEditing(false); setDraft(f) }}
