@@ -508,7 +508,14 @@ export default function HistoryPage() {
     <div className="flex flex-col flex-1 px-6 py-8">
       <div className="flex items-center mb-6">
         <Link href="/" className="text-stone-500 text-sm mr-4">← Back</Link>
-        <h1 className="text-xl font-semibold text-stone-800">History</h1>
+        <h1 className="text-xl font-semibold text-stone-800 flex-1">History</h1>
+        <a
+          href="/api/export"
+          download
+          className="text-xs text-stone-500 border border-stone-300 rounded-lg px-3 py-1.5 active:bg-stone-50"
+        >
+          Export to Excel
+        </a>
       </div>
 
       <div className="flex bg-stone-100 rounded-xl p-1 mb-6">
