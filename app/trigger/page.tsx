@@ -44,37 +44,37 @@ const SCARF_ITEMS = [
   {
     key: 'scarfStatus',
     label: 'Status',
-    description: 'Your relative importance or ranking compared to others.',
-    reward: 'Feeling valued, respected, or praised.',
-    threat: 'Unsolicited negative feedback or being treated as inferior.',
+    description: 'Do I matter here?',
+    triggers: 'Public correction or criticism, being ignored or overlooked, ideas dismissed, loss of respect or recognition, comparison with others.',
+    helps: 'Give recognition, acknowledge, protect dignity.',
   },
   {
     key: 'scarfCertainty',
     label: 'Certainty',
-    description: 'Your ability to predict the future or know what will happen next.',
-    reward: 'Clarity, clear expectations, and predictable routines.',
-    threat: 'Ambiguity, organizational change, or not knowing what to expect.',
+    description: 'Do I know what is happening?',
+    triggers: 'Unclear goals or decisions, constant change, mixed messages, lack of information, surprises.',
+    helps: 'Give clarity, share information, communicate early.',
   },
   {
     key: 'scarfAutonomy',
     label: 'Autonomy',
-    description: 'Your sense of control over your choices and environment.',
-    reward: 'Having choices and freedom to make decisions.',
-    threat: 'Micromanagement or a strict command-and-control setup.',
+    description: 'Do I have choice?',
+    triggers: 'Being micromanaged, no input in decisions, feeling controlled, "you have to" language, no flexibility.',
+    helps: 'Explain the why, ask for input, support independence.',
   },
   {
     key: 'scarfRelatedness',
     label: 'Relatedness',
-    description: 'Your feeling of safety, trust, and connection with others.',
-    reward: 'Being included, having a mentor, or feeling like part of a tribe.',
-    threat: 'Social rejection, isolation, or feeling like an outsider.',
+    description: 'Am I safe with you?',
+    triggers: 'Feeling excluded, curt or harsh tone, broken trust, loss of connection, feeling isolated.',
+    helps: 'Build trust, be present, include and listen.',
   },
   {
     key: 'scarfFairness',
     label: 'Fairness',
-    description: 'Your perception that interactions and decisions are equitable and unbiased.',
-    reward: 'Transparency, honesty, and an even playing field.',
-    threat: 'Perceived favoritism, unequal rules, or hidden agendas.',
+    description: 'Is this just?',
+    triggers: 'Unfair treatment, unclear rules, favouritism, broken promises, unequal rewards.',
+    helps: 'Keep promises, apply rules fairly, explain decisions.',
   },
 ]
 
@@ -197,10 +197,10 @@ export default function TriggerPage() {
                         </div>
                         <div className="text-xs text-stone-500 mt-0.5">{item.description}</div>
                         <div className="text-xs text-stone-500 mt-1">
-                          <span className="text-emerald-600 font-medium">Reward:</span> {item.reward}
+                          <span className="text-emerald-600 font-medium">What helps:</span> {item.helps}
                         </div>
                         <div className="text-xs text-stone-500">
-                          <span className="text-red-500 font-medium">Threat:</span> {item.threat}
+                          <span className="text-red-500 font-medium">Triggers:</span> {item.triggers}
                         </div>
                       </div>
                     ))}
